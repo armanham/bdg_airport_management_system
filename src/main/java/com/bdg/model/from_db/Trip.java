@@ -1,4 +1,4 @@
-package com.bdg.model;
+package com.bdg.model.from_db;
 
 import java.sql.Timestamp;
 
