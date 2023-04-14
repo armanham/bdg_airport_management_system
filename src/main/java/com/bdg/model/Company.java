@@ -6,7 +6,7 @@ public class Company {
 
     private int id;
     private String name;
-    private Date date;
+    private Date foundDate;
 
     public int getId() {
         return id;
@@ -24,11 +24,11 @@ public class Company {
         this.name = name;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getFoundDate() {
+        return foundDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setFoundDate(Date foundDate) {
+        this.foundDate = foundDate;
     }
 }
