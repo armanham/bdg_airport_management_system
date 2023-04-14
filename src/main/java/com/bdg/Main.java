@@ -1,7 +1,7 @@
 package com.bdg;
 
 import com.bdg.db.DBConnectionManager;
-import com.bdg.insert_to_db.Inserter;
+import com.bdg.insert_into_db.Inserter;
 
 import java.sql.Connection;
 

@@ -1,4 +1,4 @@
-package com.bdg.insert_to_db;
+package com.bdg.insert_into_db;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
