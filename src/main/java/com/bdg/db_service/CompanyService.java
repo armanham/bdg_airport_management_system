@@ -1,7 +1,6 @@
 package com.bdg.db_service;
 
 import com.bdg.db_repository.CompanyRepository;
-import com.bdg.model.from_db.Company;
 
 import java.sql.*;
 import java.util.LinkedHashSet;
@@ -13,7 +12,7 @@ public class CompanyService implements CompanyRepository {
     private Connection connection;
 
 
-    public Optional<Company> getById(int id) {
+    public Optional<com.bdg.model.from_db.Company> getById(int id) {
         checkId(id);
 
         PreparedStatement pst = null;
@@ -25,7 +24,7 @@ public class CompanyService implements CompanyRepository {
 
             rs = pst.executeQuery();
 
-            Company result = new Company();
+            com.bdg.model.from_db.Company result = new com.bdg.model.from_db.Company();
             while (rs.next()) {
                 result.setId(rs.getInt("id"));
                 result.setName(rs.getString("name"));
@@ -47,7 +46,7 @@ public class CompanyService implements CompanyRepository {
     }
 
 
-    public Optional<Set<Company>> getAll() {
+    public Optional<Set<com.bdg.model.from_db.Company>> getAll() {
         Statement st = null;
         ResultSet rs = null;
 
@@ -55,10 +54,10 @@ public class CompanyService implements CompanyRepository {
             st = connection.createStatement();
             rs = st.executeQuery("select * from company");
 
-            Set<Company> result = new LinkedHashSet<>();
+            Set<com.bdg.model.from_db.Company> result = new LinkedHashSet<>();
 
             while (rs.next()) {
-                Company tempComp = new Company();
+                com.bdg.model.from_db.Company tempComp = new com.bdg.model.from_db.Company();
                 tempComp.setId(rs.getInt("id"));
                 tempComp.setName(rs.getString("name"));
                 tempComp.setFoundDate(rs.getDate("found_date"));
@@ -79,6 +78,18 @@ public class CompanyService implements CompanyRepository {
             }
         }
     }
+
+
+    @Override
+    public com.bdg.model.to_db.Company save(com.bdg.model.to_db.Company company) {
+        if (company == null) {
+            throw new NullPointerException("Passed null value: ");
+        }
+
+
+        return null;
+    }
+
 
     public void setConnection(Connection connection) {
         checkNullConnection(connection);
