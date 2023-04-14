@@ -1,4 +1,4 @@
-package com.bdg.db;
+package com.bdg.db_manager;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
