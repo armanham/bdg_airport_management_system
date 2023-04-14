@@ -67,4 +67,17 @@ public class Trip {
     public void setTimeIn(Timestamp timeIn) {
         this.timeIn = timeIn;
     }
+
+    @Override
+    public String toString() {
+        return "Trip{" +
+                "tripNumber=" + tripNumber +
+                ", company=" + company +
+                ", airplane='" + airplane + '\'' +
+                ", townFrom='" + townFrom + '\'' +
+                ", townTo='" + townTo + '\'' +
+                ", timeOut=" + timeOut +
+                ", timeIn=" + timeIn +
+                "}\n";
+    }
 }

@@ -31,4 +31,13 @@ public class Company {
     public void setFoundDate(Date foundDate) {
         this.foundDate = foundDate;
     }
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", foundDate=" + foundDate +
+                "}\n";
+    }
 }
