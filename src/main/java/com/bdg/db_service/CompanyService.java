@@ -4,7 +4,6 @@ import com.bdg.db_repository.CompanyRepository;
 
 import java.sql.*;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 public class CompanyService implements CompanyRepository {
@@ -12,7 +11,7 @@ public class CompanyService implements CompanyRepository {
     private Connection connection;
 
 
-    public Optional<com.bdg.model.from_db.Company> getById(int id) {
+    public com.bdg.model.from_db.Company getById(int id) {
         checkId(id);
 
         PreparedStatement pst = null;
@@ -24,14 +23,15 @@ public class CompanyService implements CompanyRepository {
 
             rs = pst.executeQuery();
 
-            com.bdg.model.from_db.Company result = new com.bdg.model.from_db.Company();
+            com.bdg.model.from_db.Company result = null;
             while (rs.next()) {
+                result = new com.bdg.model.from_db.Company();
                 result.setId(rs.getInt("id"));
                 result.setName(rs.getString("name"));
                 result.setFoundDate(rs.getDate("found_date"));
             }
 
-            return Optional.of(result);
+            return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -46,7 +46,7 @@ public class CompanyService implements CompanyRepository {
     }
 
 
-    public Optional<Set<com.bdg.model.from_db.Company>> getAll() {
+    public Set<com.bdg.model.from_db.Company> getAll() {
         Statement st = null;
         ResultSet rs = null;
 
@@ -65,7 +65,7 @@ public class CompanyService implements CompanyRepository {
                 result.add(tempComp);
             }
 
-            return Optional.of(result);
+            return result.isEmpty() ? null : result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -96,6 +96,48 @@ public class CompanyService implements CompanyRepository {
             pst.executeUpdate();
 
             return company;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                assert pst != null;
+                pst.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
+    @Override
+    public boolean deleteBy(int id) {
+        checkId(id);
+
+        PreparedStatement pst = null;
+
+        if (getById(id) == null) {
+            System.out.println("Company with " + id + " id does not exists:");
+            return false;
+        }
+
+        try {
+            pst = connection.prepareStatement("select count(*) from trip where company_id = ?");
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            int count = rs.getInt("count");
+
+            if (count > 0) {
+                System.out.println("First remove the row from the 'trip' table where 'company_id' is " + id + ": ");
+                return false;
+            }
+
+            pst = connection.prepareStatement("delete from company where id = ?");
+            pst.setInt(1, id);
+            pst.executeUpdate();
+
+            System.out.println("Company with " + id + " id deleted successfully:");
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
