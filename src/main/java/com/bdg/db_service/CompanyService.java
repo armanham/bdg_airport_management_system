@@ -86,8 +86,26 @@ public class CompanyService implements CompanyRepository {
             throw new NullPointerException("Passed null value: ");
         }
 
+        PreparedStatement pst = null;
 
-        return null;
+        try {
+            pst = connection.prepareStatement("insert into company(name, found_date) values(?, ?)");
+            pst.setString(1, company.getName());
+            pst.setDate(2, company.getFoundDate());
+
+            pst.executeUpdate();
+
+            return company;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                assert pst != null;
+                pst.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 
