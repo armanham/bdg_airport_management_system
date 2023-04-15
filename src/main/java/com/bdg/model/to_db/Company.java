@@ -1,6 +1,6 @@
 package com.bdg.model.to_db;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Company {
 
