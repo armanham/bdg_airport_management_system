@@ -1,7 +1,6 @@
 package com.bdg.db_service;
 
 import com.bdg.db_repository.CompanyRepository;
-import com.bdg.model.from_db.Company;
 
 import java.sql.*;
 import java.util.LinkedHashSet;
@@ -211,7 +210,7 @@ public class CompanyService implements CompanyRepository {
             rs = pst.executeQuery();
 
             while (rs.next()) {
-                Company tempCompany = new Company();
+                com.bdg.model.from_db.Company tempCompany = new com.bdg.model.from_db.Company();
                 tempCompany.setId(rs.getInt(1));
                 tempCompany.setName(rs.getString(2));
                 tempCompany.setFoundDate(rs.getDate(3));
