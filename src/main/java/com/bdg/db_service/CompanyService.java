@@ -55,7 +55,7 @@ public class CompanyService implements CompanyRepository {
             st = connection.createStatement();
             rs = st.executeQuery("select * from company");
 
-            Set<com.bdg.model.from_db.Company> result = new LinkedHashSet<>();
+            Set<com.bdg.model.from_db.Company> companies = new LinkedHashSet<>();
 
             while (rs.next()) {
                 com.bdg.model.from_db.Company tempComp = new com.bdg.model.from_db.Company();
@@ -63,10 +63,10 @@ public class CompanyService implements CompanyRepository {
                 tempComp.setName(rs.getString("name"));
                 tempComp.setFoundDate(rs.getDate("found_date"));
 
-                result.add(tempComp);
+                companies.add(tempComp);
             }
 
-            return result.isEmpty() ? null : result;
+            return companies.isEmpty() ? null : companies;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -159,7 +159,7 @@ public class CompanyService implements CompanyRepository {
         }
         checkId(id);
 
-        if(getById(id) == null){
+        if (getById(id) == null) {
             System.out.println("Company with " + id + " id does not exists:");
             return -1;
         }
@@ -176,7 +176,7 @@ public class CompanyService implements CompanyRepository {
             return id;
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
+        } finally {
             try {
                 assert pst != null;
                 pst.close();
@@ -188,8 +188,49 @@ public class CompanyService implements CompanyRepository {
 
 
     @Override
-    public Set<Company> get(int offset, int perPage, String sort) {
-        return null;
+    public Set<com.bdg.model.from_db.Company> get(int offset, int perPage, String sort) {
+        if (offset <= 0 || perPage <= 0) {
+            throw new IllegalArgumentException("Passed non-positive value as 'offset' or 'perPage': ");
+        }
+        if (sort == null || sort.isEmpty()) {
+            throw new IllegalArgumentException("Passed null or empty value as 'sort': ");
+        }
+        if (!sort.equals("id") && !sort.equals("name") && !sort.equals("found_date")) {
+            throw new IllegalArgumentException("Parameter 'sort' must be 'id' or 'name' or 'found_date': ");
+        }
+
+        Set<com.bdg.model.from_db.Company> companies = new LinkedHashSet<>();
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            pst = connection.prepareStatement("select * from company order by " + sort + " limit ? offset ?");
+            pst.setInt(1, perPage);
+            pst.setInt(2, offset);
+
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                Company tempCompany = new Company();
+                tempCompany.setId(rs.getInt(1));
+                tempCompany.setName(rs.getString(2));
+                tempCompany.setFoundDate(rs.getDate(3));
+                companies.add(tempCompany);
+            }
+
+            return companies.isEmpty() ? null : companies;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                assert pst != null;
+                assert rs != null;
+                pst.close();
+                rs.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 
