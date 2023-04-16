@@ -23,15 +23,15 @@ public class Inserter {
             "insert into pass_in_trip(trip_id, pass_id, date, place) values(?, ?, ?, ?)";
 
     private static final Path PATH_COMPANY_TXT =
-            Path.of("C:\\Users\\user\\Desktop\\homework_JDBC\\companies.txt");
+            Path.of("C:\\Users\\user\\Java Projects\\airport_management_system\\src\\main\\resources\\companies.txt");
     private static final Path PATH_ADDRESS_TXT =
-            Path.of("C:\\Users\\user\\Desktop\\homework_JDBC\\addresses.txt");
+            Path.of("C:\\Users\\user\\Java Projects\\airport_management_system\\src\\main\\resources\\addresses.txt");
     private static final Path PATH_PASSENGER_TXT =
-            Path.of("C:\\Users\\user\\Desktop\\homework_JDBC\\passengers.txt");
+            Path.of("C:\\Users\\user\\Java Projects\\airport_management_system\\src\\main\\resources\\passengers.txt");
     private static final Path PATH_TRIP_TXT =
-            Path.of("C:\\Users\\user\\Desktop\\homework_JDBC\\trip.txt");
+            Path.of("C:\\Users\\user\\Java Projects\\airport_management_system\\src\\main\\resources\\trip.txt");
     private static final Path PATH_PASSINTRIP_TXT =
-            Path.of("C:\\Users\\user\\Desktop\\homework_JDBC\\pass_in_trip.txt");
+            Path.of("C:\\Users\\user\\Java Projects\\airport_management_system\\src\\main\\resources\\pass_in_trip.txt");
 
 
     public void insertCompanyTable(Connection con) {
