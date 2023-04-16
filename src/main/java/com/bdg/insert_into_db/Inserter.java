@@ -22,16 +22,13 @@ public class Inserter {
     private static final String INSERT_INTO_PASSINTRIP_SQL =
             "insert into pass_in_trip(trip_id, pass_id, date, place) values(?, ?, ?, ?)";
 
-    private static final Path PATH_COMPANY_TXT =
-            Path.of("C:\\Users\\user\\Java Projects\\airport_management_system\\src\\main\\resources\\companies.txt");
-    private static final Path PATH_ADDRESS_TXT =
-            Path.of("C:\\Users\\user\\Java Projects\\airport_management_system\\src\\main\\resources\\addresses.txt");
-    private static final Path PATH_PASSENGER_TXT =
-            Path.of("C:\\Users\\user\\Java Projects\\airport_management_system\\src\\main\\resources\\passengers.txt");
-    private static final Path PATH_TRIP_TXT =
-            Path.of("C:\\Users\\user\\Java Projects\\airport_management_system\\src\\main\\resources\\trip.txt");
-    private static final Path PATH_PASSINTRIP_TXT =
-            Path.of("C:\\Users\\user\\Java Projects\\airport_management_system\\src\\main\\resources\\pass_in_trip.txt");
+    private static final String ROOT_PATH =
+            "C:\\Users\\user\\Java Projects\\airport_management_system\\src\\main\\resources\\";
+    private static final Path PATH_COMPANY_TXT = Path.of(ROOT_PATH + "companies.txt");
+    private static final Path PATH_ADDRESS_TXT = Path.of(ROOT_PATH + "addresses.txt");
+    private static final Path PATH_PASSENGER_TXT = Path.of(ROOT_PATH + "passengers.txt");
+    private static final Path PATH_TRIP_TXT = Path.of(ROOT_PATH + "trip.txt");
+    private static final Path PATH_PASSINTRIP_TXT = Path.of(ROOT_PATH + "pass_in_trip.txt");
 
 
     public void insertCompanyTable(Connection con) {
