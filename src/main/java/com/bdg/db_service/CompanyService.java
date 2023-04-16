@@ -1,6 +1,7 @@
 package com.bdg.db_service;
 
 import com.bdg.db_repository.CompanyRepository;
+import com.bdg.model.from_db.Company;
 
 import java.sql.*;
 import java.util.LinkedHashSet;
@@ -113,12 +114,12 @@ public class CompanyService implements CompanyRepository {
     public boolean deleteBy(int id) {
         checkId(id);
 
-        PreparedStatement pst = null;
-
         if (getById(id) == null) {
             System.out.println("Company with " + id + " id does not exists:");
             return false;
         }
+
+        PreparedStatement pst = null;
 
         try {
             pst = connection.prepareStatement("select count(*) from trip where company_id = ?");
@@ -148,6 +149,47 @@ public class CompanyService implements CompanyRepository {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+
+    @Override
+    public int updateBy(int id, com.bdg.model.to_db.Company company) {
+        if (company == null) {
+            throw new NullPointerException("Passed null value as 'company': ");
+        }
+        checkId(id);
+
+        if(getById(id) == null){
+            System.out.println("Company with " + id + " id does not exists:");
+            return -1;
+        }
+
+        PreparedStatement pst = null;
+
+        try {
+            pst = connection.prepareStatement("update company set name = ?, found_date = ? where id = ?");
+            pst.setString(1, company.getName());
+            pst.setDate(2, company.getFoundDate());
+            pst.setInt(3, id);
+
+            pst.executeUpdate();
+            return id;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            try {
+                assert pst != null;
+                pst.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
+    @Override
+    public Set<Company> get(int offset, int perPage, String sort) {
+        return null;
     }
 
 
