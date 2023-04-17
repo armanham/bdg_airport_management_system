@@ -83,9 +83,7 @@ public class CompanyService implements CompanyRepository {
 
     @Override
     public Company save(Company company) {
-        if (company == null) {
-            throw new NullPointerException("Passed null value: ");
-        }
+        checkNull(company);
 
         PreparedStatement pst = null;
 
@@ -154,9 +152,7 @@ public class CompanyService implements CompanyRepository {
 
     @Override
     public int updateBy(int id, Company company) {
-        if (company == null) {
-            throw new NullPointerException("Passed null value as 'company': ");
-        }
+        checkNull(company);
         checkId(id);
 
         if (getById(id) == null) {
@@ -235,13 +231,13 @@ public class CompanyService implements CompanyRepository {
 
 
     public void setConnection(Connection connection) {
-        checkNullConnection(connection);
+        checkNull(connection);
         this.connection = connection;
     }
 
-    private void checkNullConnection(Connection con) {
-        if (con == null) {
-            throw new NullPointerException("Passed null value as 'con': ");
+    private void checkNull(Object obj) {
+        if (obj == null) {
+            throw new NullPointerException("Passed null value: ");
         }
     }
 
