@@ -11,15 +11,26 @@ public class DBConnectionManager {
     public static final String PASSWORD = "2232";
     private static Connection connection;
 
+    private static DBConnectionManager dbConnectionManager;
+
+    private DBConnectionManager(){
+    }
+
+    public static DBConnectionManager getInstance() {
+        if (dbConnectionManager==null)
+        {
+            dbConnectionManager = new DBConnectionManager();
+        }
+        return dbConnectionManager;
+    }
 
     public static Connection getConnection() {
         try {
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             return connection;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     public static void closeConnection() {
@@ -29,7 +40,7 @@ public class DBConnectionManager {
         try {
             connection.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }
