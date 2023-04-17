@@ -1,18 +1,20 @@
 package com.bdg.db_repository;
 
+import com.bdg.model.Company;
+
 import java.util.Set;
 
 public interface CompanyRepository {
 
-    com.bdg.model.from_db.Company getById(int id);
+    Company getById(int id);
 
-    Set<com.bdg.model.from_db.Company> getAll();
+    Set<Company> getAll();
 
-    com.bdg.model.to_db.Company save(com.bdg.model.to_db.Company company);
+    Company save(Company company);
 
     boolean deleteBy(int id);
 
-    int updateBy(int id, com.bdg.model.to_db.Company company);
+    int updateBy(int id, Company company);
 
-    Set<com.bdg.model.from_db.Company> get(int offset, int perPage, String sort);
+    Set<Company> get(int offset, int perPage, String sort);
 }

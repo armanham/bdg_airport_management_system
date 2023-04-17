@@ -1,6 +1,7 @@
 package com.bdg.db_service;
 
 import com.bdg.db_repository.CompanyRepository;
+import com.bdg.model.Company;
 
 import java.sql.*;
 import java.util.LinkedHashSet;
@@ -11,7 +12,7 @@ public class CompanyService implements CompanyRepository {
     private Connection connection;
 
 
-    public com.bdg.model.from_db.Company getById(int id) {
+    public Company getById(int id) {
         checkId(id);
 
         PreparedStatement pst = null;
@@ -23,9 +24,9 @@ public class CompanyService implements CompanyRepository {
 
             rs = pst.executeQuery();
 
-            com.bdg.model.from_db.Company result = null;
+            Company result = null;
             while (rs.next()) {
-                result = new com.bdg.model.from_db.Company();
+                result = new Company();
                 result.setId(rs.getInt("id"));
                 result.setName(rs.getString("name"));
                 result.setFoundDate(rs.getDate("found_date"));
@@ -46,7 +47,7 @@ public class CompanyService implements CompanyRepository {
     }
 
 
-    public Set<com.bdg.model.from_db.Company> getAll() {
+    public Set<Company> getAll() {
         Statement st = null;
         ResultSet rs = null;
 
@@ -54,10 +55,10 @@ public class CompanyService implements CompanyRepository {
             st = connection.createStatement();
             rs = st.executeQuery("select * from company");
 
-            Set<com.bdg.model.from_db.Company> companies = new LinkedHashSet<>();
+            Set<Company> companies = new LinkedHashSet<>();
 
             while (rs.next()) {
-                com.bdg.model.from_db.Company tempComp = new com.bdg.model.from_db.Company();
+                Company tempComp = new Company();
                 tempComp.setId(rs.getInt("id"));
                 tempComp.setName(rs.getString("name"));
                 tempComp.setFoundDate(rs.getDate("found_date"));
@@ -81,7 +82,7 @@ public class CompanyService implements CompanyRepository {
 
 
     @Override
-    public com.bdg.model.to_db.Company save(com.bdg.model.to_db.Company company) {
+    public Company save(Company company) {
         if (company == null) {
             throw new NullPointerException("Passed null value: ");
         }
@@ -152,7 +153,7 @@ public class CompanyService implements CompanyRepository {
 
 
     @Override
-    public int updateBy(int id, com.bdg.model.to_db.Company company) {
+    public int updateBy(int id, Company company) {
         if (company == null) {
             throw new NullPointerException("Passed null value as 'company': ");
         }
@@ -187,7 +188,7 @@ public class CompanyService implements CompanyRepository {
 
 
     @Override
-    public Set<com.bdg.model.from_db.Company> get(int offset, int perPage, String sort) {
+    public Set<Company> get(int offset, int perPage, String sort) {
         if (offset <= 0 || perPage <= 0) {
             throw new IllegalArgumentException("Passed non-positive value as 'offset' or 'perPage': ");
         }
@@ -198,7 +199,7 @@ public class CompanyService implements CompanyRepository {
             throw new IllegalArgumentException("Parameter 'sort' must be 'id' or 'name' or 'found_date': ");
         }
 
-        Set<com.bdg.model.from_db.Company> companies = new LinkedHashSet<>();
+        Set<Company> companies = new LinkedHashSet<>();
         PreparedStatement pst = null;
         ResultSet rs = null;
 
@@ -210,7 +211,7 @@ public class CompanyService implements CompanyRepository {
             rs = pst.executeQuery();
 
             while (rs.next()) {
-                com.bdg.model.from_db.Company tempCompany = new com.bdg.model.from_db.Company();
+                Company tempCompany = new Company();
                 tempCompany.setId(rs.getInt(1));
                 tempCompany.setName(rs.getString(2));
                 tempCompany.setFoundDate(rs.getDate(3));
