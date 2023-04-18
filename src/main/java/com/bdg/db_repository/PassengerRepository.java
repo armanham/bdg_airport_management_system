@@ -18,7 +18,7 @@ public interface PassengerRepository {
 
     Passenger updateBy(int id, Passenger passenger);
 
-    void deleteBy(int id);
+    boolean deleteBy(int id);
 
     List<Passenger> getPassengersOfTrip(int tripNumber);
 

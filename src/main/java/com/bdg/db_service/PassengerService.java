@@ -89,6 +89,7 @@ public class PassengerService implements PassengerRepository {
         }
     }
 
+
     @Override
     public Set<Passenger> get(int offset, int perPage, String sort) {
         if (offset <= 0 || perPage <= 0) {
@@ -135,6 +136,7 @@ public class PassengerService implements PassengerRepository {
         }
     }
 
+
     @Override
     public Passenger save(Passenger passenger) {
         checkNull(passenger);
@@ -158,20 +160,53 @@ public class PassengerService implements PassengerRepository {
         return null;
     }
 
-    @Override
-    public void deleteBy(int id) {
 
+    @Override
+    public boolean deleteBy(int id) {
+        checkId(id);
+
+        if (getBy(id) == null) {
+            System.out.println("Passenger with " + id + " id does not exists: ");
+            return false;
+        }
+
+        if (getTripIdByPassengerId(id) != -1) {
+            System.out.println("First remove the row from the 'pass_in_trip' table where 'pass_id' is " + id + ": ");
+            return false;
+        }
+
+        PreparedStatement pst = null;
+
+        try {
+            pst = connection.prepareStatement("delete from passenger where id = ?");
+            pst.setInt(1, id);
+            pst.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            try {
+                assert pst != null;
+                pst.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
+
 
     @Override
     public List<Passenger> getPassengersOfTrip(int tripNumber) {
         return null;
     }
 
+
     @Override
     public void registerTrip(Trip trip, Passenger passenger) {
 
     }
+
 
     @Override
     public void cancelTrip(int passengerId, int tripNumber) {
@@ -389,6 +424,38 @@ public class PassengerService implements PassengerRepository {
                 assert rs != null;
                 rs.close();
                 st.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
+    private int getTripIdByPassengerId(int passengerId) {
+        checkId(passengerId);
+
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            pst = connection.prepareStatement("select trip_id from pass_in_trip where pass_id = ?");
+            pst.setInt(1, passengerId);
+
+            rs = pst.executeQuery();
+
+            int tripId = -1;
+            while (rs.next()) {
+                tripId = rs.getInt("trip_id");
+            }
+            return tripId;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                assert pst != null;
+                assert rs != null;
+                rs.close();
+                pst.close();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
